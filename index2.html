@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konibek & Surayyo | To'y Taklifnomasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FAF8F5',
+                        burgundy: '#4A1525',
+                        beige: '#EBE3D9',
+                        beigeLight: '#F3EDE6',
+                        lace: '#FDFBF7'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        vibes: ['"Great Vibes"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cormorant Garamond', serif; background-color: #FAF8F5; color: #4A1525; }
+        
+        /* Стили для стартового экрана-конверта */
+        #intro-screen {
+            background-color: #FDFBF7;
+            /* Легкий узор, имитирующий текстуру бумаги/кружева */
+            background-image: radial-gradient(#EBE3D9 1px, transparent 1px), radial-gradient(#EBE3D9 1px, transparent 1px);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            transition: opacity 1s ease, transform 1s ease, visibility 1s;
+        }
+        
+        .intro-hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Белая/Светло-серая сургучная печать */
+        .white-seal {
+            width: 110px;
+            height: 140px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0ede6 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.08),
+                inset 0 4px 10px rgba(255,255,255,1),
+                inset 0 -4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255,255,255,0.8);
+            position: relative;
+        }
+        
+        /* Внутренний ободок печати (ветви) */
+        .white-seal::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px dashed #d1c9c0;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        /* Имитация складок конверта */
+        .envelope-folds::before, .envelope-folds::after {
+            content: '';
+            position: absolute;
+            width: 150vw;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(209, 201, 192, 0.3), transparent);
+            z-index: 0;
+        }
+        .envelope-folds::before {
+            transform: rotate(35deg);
+        }
+        .envelope-folds::after {
+            transform: rotate(-35deg);
+        }
+
+        /* Остальные стили основного сайта */
+        .arch-image {
+            border-top-left-radius: 9999px;
+            border-top-right-radius: 9999px;
+        }
+        .music-btn {
+            background-color: #EBE3D9;
+            color: #4A1525;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(74, 21, 37, 0.2); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(74, 21, 37, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(74, 21, 37, 0); }
+        }
+        .music-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 2.5rem;
+            top: 3rem;
+            bottom: -1rem;
+            width: 1px;
+            background-color: #4A1525;
+            opacity: 0.3;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+        input[type="radio"] {
+            accent-color: #FAF8F5;
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden text-burgundy" id="main-body">
+
+    <!-- СТАРТОВЫЙ ЭКРАН (АНИМАЦИЯ КОНВЕРТА) -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+        <!-- Складки кружева (декорация) -->
+        <div class="envelope-folds absolute inset-0 flex items-center justify-center"></div>
+        
+        <!-- Овальная печать Love -->
+        <div class="white-seal z-10 hover:scale-105 transition-transform duration-500">
+            <span class="font-vibes text-4xl text-[#a89f91] opacity-80 mt-2">Love</span>
+        </div>
+
+        <!-- Текст внизу -->
+        <p class="absolute bottom-16 text-[#a89f91] tracking-[0.3em] text-sm md:text-base uppercase z-10 font-medium">
+            Ochish uchun bosing
+        </p>
+    </div>
+
+    <!-- Фоновая музыка -->
+    <audio id="bg-music" loop>
+        <source src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Frederic_Chopin_-_Nocturne_Op._9%2C_No._1_in_B_flat_minor.ogg" type="audio/ogg">
+    </audio>
+
+    <button id="music-btn" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-md music-btn music-pulse focus:outline-none transition-transform hover:scale-105 text-xl">
+        <i class="fas fa-volume-up"></i>
+    </button>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ САЙТА -->
+    <!-- 1. ГЛАВНЫЙ ЭКРАН -->
+    <section class="min-h-[90vh] flex flex-col items-center justify-center text-center p-6 relative border-[12px] border-transparent" 
+             style="border-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22><path d=%22M15 0 C20 10 30 15 30 15 C30 15 20 20 15 30 C10 20 0 15 0 15 C0 15 10 10 15 0 Z%22 fill=%22%23EBE3D9%22/></svg>') 30 stretch;">
+        <h1 class="text-6xl md:text-8xl font-medium mb-4">Konibek</h1>
+        <p class="font-vibes text-4xl mb-4 text-[#a89f91]">&</p>
+        <h1 class="text-6xl md:text-8xl font-medium mb-8">Surayyo</h1>
+        <p class="text-xl md:text-2xl font-semibold tracking-widest mb-10">09.11.2026</p>
+        
+        <div class="text-burgundy opacity-80 mb-10">
+            <i class="fa-solid fa-chess-rook text-4xl mb-2"></i>
+            <i class="fa-solid fa-house-chimney text-6xl mx-2"></i>
+            <i class="fa-solid fa-chess-rook text-4xl mb-2"></i>
+        </div>
+    </section>
+
+    <!-- 2. ВСТУПЛЕНИЕ -->
+    <section class="py-16 px-6 text-center max-w-2xl mx-auto">
+        <div class="mb-6 opacity-80">
+            <i class="fas fa-dove text-4xl mr-2"></i>
+            <i class="fas fa-dove text-4xl fa-flip-horizontal"></i>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-medium mb-8">Oilalari hamrohligida</h2>
+        <p class="text-xl md:text-2xl leading-relaxed mb-12 opacity-90">
+            Nikoh to'yimiz haqida<br>quvonch bilan xabar beramiz
+        </p>
+        <p class="text-sm tracking-[0.2em] uppercase mb-2">To'y Egalari</p>
+        <p class="text-xl">Rustamovlar xonadoni</p>
+    </section>
+
+    <!-- 3. ТАЙМЕР -->
+    <section class="bg-burgundy text-cream py-20 px-4 text-center relative mt-8">
+        <div class="absolute top-0 left-0 w-full h-4 flex justify-around opacity-50 overflow-hidden">
+            <div class="w-full h-full border-t-[8px] border-dotted border-cream"></div>
+        </div>
+
+        <div class="max-w-md mx-auto border border-cream/30 p-8 rounded-lg relative">
+            <h2 class="text-4xl md:text-5xl font-medium mb-12">Qolgan vaqt</h2>
+            
+            <div class="flex justify-center items-center gap-4 md:gap-8 text-cream">
+                <div class="flex flex-col items-center">
+                    <span id="days" class="text-4xl md:text-5xl font-semibold mb-2">00</span>
+                    <span class="text-xs tracking-widest uppercase">Kun</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span id="hours" class="text-4xl md:text-5xl font-semibold mb-2">00</span>
+                    <span class="text-xs tracking-widest uppercase">Soat</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span id="minutes" class="text-4xl md:text-5xl font-semibold mb-2">00</span>
+                    <span class="text-xs tracking-widest uppercase">Daq</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span id="seconds" class="text-4xl md:text-5xl font-semibold mb-2">00</span>
+                    <span class="text-xs tracking-widest uppercase">Son</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ПРОГРАММА -->
+    <section class="py-20 px-6 max-w-xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-medium mb-4">To'y dasturi</h2>
+            <p class="text-lg opacity-80">Ilk salomdan so'nggi raqsgacha — bayram kuni.</p>
+        </div>
+
+        <div class="space-y-8 relative">
+            <div class="flex items-center timeline-item relative">
+                <div class="w-20 h-20 bg-beigeLight flex items-center justify-center rounded-sm shrink-0 z-10 timeline-line border border-beige">
+                    <i class="far fa-heart text-2xl"></i>
+                </div>
+                <div class="ml-6 flex-grow flex items-center">
+                    <span class="text-3xl font-medium mr-4">16:00</span>
+                    <div>
+                        <i class="fas fa-heart text-xs text-burgundy/50 mr-2"></i>
+                        <span class="tracking-widest text-sm uppercase font-semibold">Mehmonlarni<br>kutib olish</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center timeline-item relative">
+                <div class="w-20 h-20 bg-beigeLight flex items-center justify-center rounded-sm shrink-0 z-10 timeline-line border border-beige">
+                    <i class="fas fa-rings text-2xl"></i>
+                </div>
+                <div class="ml-6 flex-grow flex items-center">
+                    <span class="text-3xl font-medium mr-4">17:00</span>
+                    <div>
+                        <i class="fas fa-heart text-xs text-burgundy/50 mr-2"></i>
+                        <span class="tracking-widest text-sm uppercase font-semibold">Kelin-kuyovning<br>kirib kelishi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center timeline-item relative">
+                <div class="w-20 h-20 bg-beigeLight flex items-center justify-center rounded-sm shrink-0 z-10 timeline-line border border-beige">
+                    <i class="fas fa-glass-cheers text-2xl"></i>
+                </div>
+                <div class="ml-6 flex-grow flex items-center">
+                    <span class="text-3xl font-medium mr-4">18:00</span>
+                    <div>
+                        <i class="fas fa-heart text-xs text-burgundy/50 mr-2"></i>
+                        <span class="tracking-widest text-sm uppercase font-semibold">Tantanali<br>ziyofat</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center timeline-item relative">
+                <div class="w-20 h-20 bg-beigeLight flex items-center justify-center rounded-sm shrink-0 z-10 border border-beige">
+                    <i class="far fa-heart text-2xl"></i>
+                </div>
+                <div class="ml-6 flex-grow flex items-center">
+                    <span class="text-3xl font-medium mr-4">19:00</span>
+                    <div>
+                        <i class="fas fa-heart text-xs text-burgundy/50 mr-2"></i>
+                        <span class="tracking-widest text-sm uppercase font-semibold">Birinchi raqs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. ГАЛЕРЕЯ -->
+    <section class="py-12 px-4 max-w-4xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-medium text-center mb-12">Galereya</h2>
+        <div class="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-8">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80" class="w-full aspect-[4/5] object-cover arch-image shadow-sm">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" class="w-full aspect-[4/5] object-cover arch-image shadow-sm">
+            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80" class="w-full aspect-[4/5] object-cover arch-image shadow-sm">
+            <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&q=80" class="w-full aspect-[4/5] object-cover arch-image shadow-sm">
+        </div>
+    </section>
+
+    <!-- 6. ЛОКАЦИЯ -->
+    <section class="py-16 px-4 text-center max-w-3xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-medium mb-6">Manzil</h2>
+        <h3 class="text-3xl font-medium mb-4">Sabo toyxonasi</h3>
+        <p class="text-sm tracking-widest uppercase mb-4 opacity-80">To'yxona Baxmal tumani Sangzor MFY</p>
+        <p class="text-lg mb-10 opacity-90">09.11.2026 · 16:00</p>
+
+        <div class="w-full h-64 md:h-80 arch-image overflow-hidden shadow-lg mb-8 border-b-4 border-burgundy">
+                       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1589938.3497428813!2d64.88875001635414!3d38.89314886475041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38b2e1d98a0d9f15%3A0xcb55aaea6f41eeca!2sSabo%20t%C3%B5yxona!5e0!3m2!1sru!2s!4v1792439276390!5m2!1sru!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+
+        </div>
+
+        <a href="https://maps.app.goo.gl/UmkZgy4BwWpB27uA9" target="_blank" class="inline-block border border-burgundy rounded-full px-8 py-3 tracking-widest text-sm uppercase hover:bg-burgundy hover:text-cream transition mb-4">
+            Xaritada Ko'rish
+        </a>
+        <br>
+        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Konibek+va+Surayyo+To%27y+Oqshomi&dates=20261109T110000Z/20261109T180000Z" 
+           target="_blank" class="inline-block text-burgundy opacity-70 underline hover:opacity-100 transition">
+            Kalendarga qo'shish
+        </a>
+    </section>
+
+    <!-- 7. АНКЕТА И ПОЖЕЛАНИЯ -->
+    <section class="bg-burgundy text-cream py-20 px-6 mt-12 text-center">
+        <div class="max-w-xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-medium mb-4">Tilaklar</h2>
+            <p class="text-lg opacity-90 mb-10">To'y egalariga o'z ezgu tilaklaringizni qoldiring</p>
+            
+            <form id="rsvp-form" class="space-y-6 text-left">
+                <div>
+                    <input type="text" id="name" required placeholder="Ismingizni kiriting" 
+                           class="w-full bg-transparent border border-cream/40 rounded-md px-4 py-4 text-cream placeholder-cream/50 focus:outline-none focus:border-cream transition">
+                </div>
+                
+                <div class="pt-4">
+                    <p class="text-2xl font-medium mb-6 text-center">Kelasizmi?</p>
+                    <p class="text-center opacity-80 mb-6">Iltimos, javobingizni bildiring.</p>
+                    
+                    <div class="space-y-4 px-2">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="attendance" value="yes" checked class="mr-3">
+                            <span class="text-lg">Kelaman</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="attendance" value="no" class="mr-3">
+                            <span class="text-lg">Kela olmayman</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <textarea id="wish" placeholder="Kelin-kuyovga tilagingiz..." 
+                              class="w-full bg-transparent border border-cream/40 rounded-md px-4 py-4 h-32 text-cream placeholder-cream/50 focus:outline-none focus:border-cream transition resize-none"></textarea>
+                    <p class="text-sm opacity-60 mt-2">Tilagingizni faqat kelin-kuyov ko'radi</p>
+                </div>
+                
+                <div class="text-center pt-6">
+                    <button type="submit" class="border border-cream rounded-full px-10 py-3 tracking-widest text-sm uppercase font-semibold hover:bg-cream hover:text-burgundy transition">
+                        Tilak Yuborish
+                    </button>
+                </div>
+            </form>
+
+            <div id="success-message" class="hidden text-center py-10">
+                <i class="fas fa-heart text-4xl mb-4 text-cream/80 animate-bounce"></i>
+                <h4 class="text-3xl font-medium mb-2">Katta Rahmat!</h4>
+                <p class="opacity-80">Sizning javobingiz yuborildi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. ФИНАЛ -->
+    <section class="py-20 px-4 text-center">
+        <h2 class="text-3xl md:text-5xl font-medium leading-relaxed max-w-2xl mx-auto">
+            Sizning tashrifingiz — biz uchun eng katta sovg'a.
+        </h2>
+    </section>
+
+    <script>
+        // АНИМАЦИЯ ВХОДА (ЛОГИКА КОНВЕРТА)
+        const introScreen = document.getElementById('intro-screen');
+        const mainBody = document.getElementById('main-body');
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        let isPlaying = false;
+
+        // Блокируем скролл пока не открыт конверт
+        mainBody.style.overflow = 'hidden';
+
+        introScreen.addEventListener('click', () => {
+            // Растворяем экран входа
+            introScreen.classList.add('intro-hidden');
+            
+            // Разрешаем прокрутку сайта
+            setTimeout(() => {
+                mainBody.style.overflow = 'auto';
+                introScreen.style.display = 'none'; // Удаляем элемент чтобы не мешал
+            }, 1000);
+
+            // Включаем музыку автоматически
+            audio.play().then(() => {
+                isPlaying = true;
+                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                musicBtn.classList.add('music-pulse');
+            }).catch(e => console.log("Браузер заблокировал автовоспроизведение: ", e));
+        });
+
+        // Управление кнопкой музыки
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                musicBtn.classList.remove('music-pulse');
+            } else {
+                audio.play().catch(() => alert("Iltimos, telefoningiz ovozini tekshiring."));
+                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                musicBtn.classList.add('music-pulse');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // ТАЙМЕР
+        const weddingDate = new Date("November 9, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+
+        // TELEGRAM BOT
+        document.getElementById('rsvp-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yuborilmoqda...';
+            submitBtn.disabled = true;
+
+            const name = document.getElementById('name').value;
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
+            const wish = document.getElementById('wish').value;
+
+            const botToken = '8873816530:AAHq7g7Di5AqBh7HEK7fwCo-KCARV1izaZ0'; 
+            const chatId = '8733786462';          
+
+            const message = `🔔 To'yga yangi javob!\n\n👤 Mehmon: ${name}\n📌 Qarori: ${attendance === 'yes' ? '✅ Keladi' : '❌ Kela olmaydi'}\n💌 Tilaklari: ${wish || 'Yozilmadi'}`;
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.ok) {
+                    document.getElementById('rsvp-form').classList.add('hidden');
+                    document.getElementById('success-message').classList.remove('hidden');
+                }
+            }).catch(() => {
+                alert("Xatolik yuz berdi. Internetni tekshiring.");
+                submitBtn.innerHTML = 'Tilak Yuborish';
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
